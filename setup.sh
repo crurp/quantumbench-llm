@@ -98,15 +98,28 @@ else
     echo -e "${GREEN}✓ Remote origin added${NC}"
 fi
 
-# Step 8: Add all files and make initial commit
-echo -e "${YELLOW}Step 8: Staging files for commit...${NC}"
+# Step 8: Configure Git user (if not already set)
+echo -e "${YELLOW}Step 8: Configuring Git user identity...${NC}"
+if ! git config user.name &>/dev/null || ! git config user.email &>/dev/null; then
+    # Set Git user for this repository only (not global)
+    git config user.name "QuantumBench LLM User"
+    git config user.email "quantumbench-llm@local"
+    echo -e "${GREEN}✓ Git user identity configured for this repository${NC}"
+    echo "   (To set global Git config, run: git config --global user.name 'Your Name' && git config --global user.email 'your@email.com')"
+else
+    echo "Git user identity already configured"
+fi
+echo ""
+
+# Step 9: Add all files and make initial commit
+echo -e "${YELLOW}Step 9: Staging files for commit...${NC}"
 git add .
 
 # Check if there are changes to commit
 if git diff --staged --quiet; then
     echo "No changes to commit (repository might already be up to date)"
 else
-    echo -e "${YELLOW}Step 9: Creating initial commit...${NC}"
+    echo -e "${YELLOW}Step 10: Creating initial commit...${NC}"
     git commit -m "Initial commit: QuantumBench LLM project setup
 
 - Created folder structure (data/, scripts/, notebooks/, models/)
@@ -117,8 +130,8 @@ else
     echo -e "${GREEN}✓ Initial commit created${NC}"
     echo ""
     
-    # Step 10: Push to remote (if main branch exists or create it)
-    echo -e "${YELLOW}Step 10: Pushing to remote repository...${NC}"
+    # Step 11: Push to remote (if main branch exists or create it)
+    echo -e "${YELLOW}Step 11: Pushing to remote repository...${NC}"
     CURRENT_BRANCH=$(git branch --show-current 2>/dev/null || echo "main")
     
     # Create main branch if it doesn't exist
