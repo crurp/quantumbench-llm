@@ -1,0 +1,15 @@
+{
+  "metrics": {},
+  "teacher_results": {
+    "model_path": "models/teacher-model",
+    "model_type": "teacher",
+    "exists": false,
+    "accuracy": 0.0
+  },
+  "student_results": {
+    "model_path": "models/student-model",
+    "model_type": "student",
+    "exists": false,
+    "accuracy": 0.0
+  }
+}
