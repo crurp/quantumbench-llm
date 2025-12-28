@@ -201,12 +201,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-        ("What is a qubit register?", "A qubit register is a collection of qubits that are manipulated together to perform quantum computations, analogous to classical computer registers."),
-        ("What is quantum circuit depth?", "Quantum circuit depth is the number of sequential gate layers in a quantum circuit, a measure of circuit complexity and execution time."),
-        ("What is quantum circuit width?", "Quantum circuit width is the number of qubits used in a quantum circuit, representing the quantum parallelism available."),
-        ("What is the quantum threshold theorem?", "The quantum threshold theorem states that quantum error correction can work if error rates are below a certain threshold, enabling fault-tolerant quantum computation."),
-        ("What is fault-tolerant quantum computing?", "Fault-tolerant quantum computing uses quantum error correction to perform reliable computations even with noisy quantum hardware."),
-        ("What is a quantum oracle?", "A quantum oracle is a black box that performs a specific function on quantum states, used as a subroutine in quantum algorithms like Grover's and Deutsch-Jozsa."),
-        ("What is quantum complexity theory?", "Quantum complexity theory studies the computational complexity of problems when solved using quantum computers, defining complexity classes like BQP."),
-        ("What is quantum state tomography?", "Quantum state tomography is the process of reconstructing a quantum state's density matrix through measurements, essential for characterizing quantum systems."),
-        ("What is quantum process tomography?", "Quantum process tomography characterizes quantum operations by determining how they transform quantum states, important for validating quantum gates."),
