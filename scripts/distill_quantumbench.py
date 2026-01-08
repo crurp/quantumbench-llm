@@ -120,7 +120,7 @@ class DistillationTrainer(Trainer):
         self.temperature = temperature
         self.alpha = alpha
     
-    def compute_loss(self, model, inputs, return_outputs=False):
+    def compute_loss(self, model, inputs, return_outputs=False, **kwargs):
         """
         Compute distillation loss combining hard and soft labels.
         
@@ -128,6 +128,7 @@ class DistillationTrainer(Trainer):
             model: Student model
             inputs: Input batch
             return_outputs: Whether to return model outputs
+            **kwargs: Additional arguments (e.g., num_items_in_batch) for compatibility
             
         Returns:
             Loss value (and optionally outputs)
@@ -413,7 +414,7 @@ def main():
         fp16=True,
         logging_steps=10,
         save_steps=100,
-        evaluation_strategy="steps",
+        eval_strategy="steps",
         eval_steps=100,
         save_total_limit=3,
         load_best_model_at_end=True,
@@ -454,4 +455,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 

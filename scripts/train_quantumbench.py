@@ -127,14 +127,6 @@ def setup_model_and_tokenizer(model_name: str, model_dir: Path, device_map: str 
         print(f"Model not found locally, will download from Hugging Face: {model_name}")
         model_load_path = model_name
     
-    # Configure 4-bit quantization for QLoRA
-    bnb_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.float16,
-        bnb_4bit_use_double_quant=True,
-    )
-    
     # Load tokenizer
     print("Loading tokenizer...")
     tokenizer = AutoTokenizer.from_pretrained(model_load_path)
@@ -144,16 +136,35 @@ def setup_model_and_tokenizer(model_name: str, model_dir: Path, device_map: str 
         tokenizer.pad_token = tokenizer.eos_token
         tokenizer.pad_token_id = tokenizer.eos_token_id
     
-    # Load model with quantization
-    print("Loading model with 4-bit quantization...")
-    model = AutoModelForCausalLM.from_pretrained(
-        model_load_path,
-        quantization_config=bnb_config,
-        device_map=device_map,
-        torch_dtype=torch.float16,
-        trust_remote_code=True,
-        low_cpu_mem_usage=True,
-    )
+    # Configure quantization based on device availability
+    use_cuda = torch.cuda.is_available()
+    if use_cuda:
+        # Use 4-bit quantization for GPU
+        bnb_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=torch.float16,
+            bnb_4bit_use_double_quant=True,
+        )
+        print("Loading model with 4-bit quantization (GPU)...")
+        model = AutoModelForCausalLM.from_pretrained(
+            model_load_path,
+            quantization_config=bnb_config,
+            device_map=device_map,
+            torch_dtype=torch.float16,
+            trust_remote_code=True,
+            low_cpu_mem_usage=True,
+        )
+    else:
+        # For CPU, load without quantization (use float32 for stability)
+        print("Loading model for CPU (no quantization)...")
+        model = AutoModelForCausalLM.from_pretrained(
+            model_load_path,
+            device_map="cpu",
+            torch_dtype=torch.float32,
+            trust_remote_code=True,
+            low_cpu_mem_usage=True,
+        )
     
     # If model was downloaded, save it locally for future use
     if model_load_path == model_name:
@@ -161,14 +172,27 @@ def setup_model_and_tokenizer(model_name: str, model_dir: Path, device_map: str 
         model.save_pretrained(str(model_path))
         tokenizer.save_pretrained(str(model_path))
     
-    # Prepare model for k-bit training
-    model = prepare_model_for_kbit_training(model)
+    # Prepare model for training
+    if use_cuda:
+        # Prepare for k-bit training with quantization
+        model = prepare_model_for_kbit_training(model)
+    else:
+        # For CPU, enable gradient computation on all parameters
+        model.gradient_checkpointing_enable()
+        for param in model.parameters():
+            param.requires_grad = False
     
-    # Configure LoRA
+    # Configure LoRA - adjust target modules based on model architecture
+    # For GPT-2, use 'c_attn' instead of 'q_proj', 'k_proj', etc.
+    if 'gpt2' in model_name.lower():
+        target_modules = ["c_attn"]  # GPT-2 uses different module names
+    else:
+        target_modules = ["q_proj", "k_proj", "v_proj", "o_proj"]  # LLaMA-style models
+    
     lora_config = LoraConfig(
         r=16,  # LoRA rank
         lora_alpha=32,  # LoRA alpha (scaling parameter)
-        target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],  # Target modules (adjust for different models)
+        target_modules=target_modules,
         lora_dropout=0.05,
         bias="none",
         task_type="CAUSAL_LM",
@@ -298,15 +322,15 @@ def main():
         per_device_eval_batch_size=args.batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
         learning_rate=args.learning_rate,
-        fp16=True,  # Use mixed precision for memory efficiency
+        fp16=torch.cuda.is_available(),  # Use mixed precision only if CUDA is available
         logging_steps=10,
         save_steps=100,
-        evaluation_strategy="steps",
+        eval_strategy="steps",
         eval_steps=100,
         save_total_limit=3,
         load_best_model_at_end=True,
         gradient_checkpointing=True,  # Enable gradient checkpointing for memory efficiency
-        optim="paged_adamw_8bit",  # Use 8-bit optimizer for memory efficiency
+        optim="paged_adamw_8bit" if torch.cuda.is_available() else "adamw_torch",  # Use 8-bit optimizer only on GPU
         report_to=None,  # Disable wandb/tensorboard if not needed
         warmup_steps=50,
     )
