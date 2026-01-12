@@ -1,0 +1,110 @@
+{
+  "teacher": {
+    "size": {
+      "disk_size_mb": 54.2945556640625,
+      "disk_size_gb": 0.053022027015686035,
+      "num_files": 22,
+      "num_parameters": 776979200,
+      "trainable_parameters": 0,
+      "num_parameters_millions": 776.9792,
+      "num_parameters_billions": 0.7769792
+    },
+    "benchmark": {
+      "load_time_seconds": 1.2010307312011719,
+      "model_memory_mb": 39.796875,
+      "peak_memory_mb": 3526.6796875,
+      "inference_times": [
+        7294.747279167175,
+        82.97068524360657,
+        75.11570024490356,
+        75.19119215011597,
+        73.47705411911011
+      ],
+      "avg_inference_time_seconds": 1520.3003821849823,
+      "total_inference_time_seconds": 7601.5019109249115,
+      "tokens_per_second": 0.16838777586313286,
+      "samples_per_second": 0.0006577647494653627,
+      "min_inference_time": 73.47705411911011,
+      "max_inference_time": 7294.747279167175
+    },
+    "accuracy": 0.04807692307692308,
+    "num_examples": 104,
+    "benchmark_summary": {
+      "load_time_seconds": 1.2010307312011719,
+      "model_memory_mb": 39.796875,
+      "peak_memory_mb": 3526.6796875,
+      "avg_inference_time_seconds": 1520.3003821849823,
+      "total_inference_time_seconds": 7601.5019109249115,
+      "tokens_per_second": 0.16838777586313286,
+      "samples_per_second": 0.0006577647494653627,
+      "min_inference_time": 73.47705411911011,
+      "max_inference_time": 7294.747279167175
+    }
+  },
+  "student": {
+    "size": {
+      "disk_size_mb": 1675.5489101409912,
+      "disk_size_gb": 1.6362782325595617,
+      "num_files": 35,
+      "num_parameters": 124439808,
+      "trainable_parameters": 124439808,
+      "num_parameters_millions": 124.439808,
+      "num_parameters_billions": 0.124439808
+    },
+    "benchmark": {
+      "load_time_seconds": 0.5381639003753662,
+      "model_memory_mb": 456.2890625,
+      "peak_memory_mb": 1055.70703125,
+      "inference_times": [
+        13.015985012054443,
+        12.954888820648193,
+        13.406277179718018,
+        13.01272463798523,
+        12.954375267028809
+      ],
+      "avg_inference_time_seconds": 13.068850183486939,
+      "total_inference_time_seconds": 65.34425091743469,
+      "tokens_per_second": 19.58856337059148,
+      "samples_per_second": 0.07651782566637297,
+      "min_inference_time": 12.954375267028809,
+      "max_inference_time": 13.406277179718018
+    },
+    "accuracy": 0.0,
+    "num_examples": 104,
+    "benchmark_summary": {
+      "load_time_seconds": 0.5381639003753662,
+      "model_memory_mb": 456.2890625,
+      "peak_memory_mb": 1055.70703125,
+      "avg_inference_time_seconds": 13.068850183486939,
+      "total_inference_time_seconds": 65.34425091743469,
+      "tokens_per_second": 19.58856337059148,
+      "samples_per_second": 0.07651782566637297,
+      "min_inference_time": 12.954375267028809,
+      "max_inference_time": 13.406277179718018
+    }
+  },
+  "distillation": {
+    "size_reduction_mb": -1621.2543544769287,
+    "size_reduction_percent": -2986.0348512807427,
+    "size_ratio": 30.860348512807427,
+    "compression_ratio": 0.03240404104914718,
+    "parameter_reduction": 652539392,
+    "parameter_reduction_percent": 83.98415195670617,
+    "parameter_ratio": 0.16015848043293823,
+    "compression_ratio_parameters": 6.243815483868313,
+    "accuracy_delta": 0.04807692307692308,
+    "accuracy_retention_percent": 0.0,
+    "accuracy_loss": -0.04807692307692308,
+    "accuracy_loss_percent": -100.0,
+    "speed_improvement_seconds": 1507.2315320014952,
+    "speed_improvement_percent": 99.14037710332583,
+    "speed_ratio": 0.008596228966741646,
+    "throughput_improvement": 116.33007960455066,
+    "memory_reduction_mb": -416.4921875,
+    "memory_reduction_percent": -1046.5449548488416,
+    "memory_ratio": 11.465449548488417,
+    "efficiency_score": 0.0,
+    "performance_per_mb": 0.0,
+    "performance_per_million_params": 0.0
+  }
+}

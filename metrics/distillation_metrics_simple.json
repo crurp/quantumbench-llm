@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-01-07T21:40:03.363045",
+  "teacher": {
+    "disk_size_mb": 54.2945556640625,
+    "disk_size_gb": 0.053022027015686035
+  },
+  "student": {
+    "disk_size_mb": 1675.5489101409912,
+    "disk_size_gb": 1.6362782325595617
+  },
+  "distillation": {}
+}
